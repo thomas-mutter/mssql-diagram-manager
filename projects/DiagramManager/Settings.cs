@@ -12,8 +12,6 @@ public sealed class Settings
 
     public required string Mode { get; set; }
 
-    public bool AllDiagrams => string.IsNullOrWhiteSpace(DiagramName);
-
     public bool Import => string.Equals(Mode, "import", StringComparison.OrdinalIgnoreCase);
 
     public bool Export => string.Equals(Mode, "export", StringComparison.OrdinalIgnoreCase);

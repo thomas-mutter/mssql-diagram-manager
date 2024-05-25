@@ -5,42 +5,40 @@
     <Nullable>enable</Nullable>
     <AssemblyName>Mutter.Tools.SqlServer.DiagramManager</AssemblyName>
     <RootNamespace>Mutter.Tools.SqlServer.DiagramManager</RootNamespace>
-
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>manage-sql-diagrams</ToolCommandName>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/thomas-mutter/mssql-diagram-manager</RepositoryUrl>
     <PackageId>Mutter.Tools.SqlServer.DiagramManager</PackageId>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Title>SqlServer Diagram Manager</Title>
     <Authors>Thomas Mutter</Authors>
     <Product>SqlServer Diagram Manager</Product>
     <Description>Exports and imports diagrams from SqlServer databases</Description>
-    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageOutputPath>../../nugets</PackageOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <AssemblyVersion>0.0.1.0</AssemblyVersion>
   </PropertyGroup>
-
   <ItemGroup>
+    <None Update="sql\*.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.11.3" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.61.1" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="sql\*.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Readme.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
   </ItemGroup>
 </Project>
