@@ -37,7 +37,7 @@ internal class SqlServerManager : ISqlServerManager, IDisposable
 
     public async Task<DbObjectState> GetDbObjectExistanceAsync(DbArtefact artefact)
     {
-        await Db.OpenAsync();
+        await EnsureConnectionOpenAsync();
 
         const string stmt = "select count(1) from sys.objects where object_id = OBJECT_ID(@name) and type = @type";
         SqlCommand cmd = new(stmt, Db);
@@ -50,14 +50,14 @@ internal class SqlServerManager : ISqlServerManager, IDisposable
 
     public async Task DeleteDiagramAsync(string name)
     {
-        await Db.OpenAsync();
+        await EnsureConnectionOpenAsync();
         DeleteDiagramNameParameter.Value = name;
         await DeleteDiagramCommand.ExecuteNonQueryAsync();
     }
 
     public async Task InsertDiagramAsync(string name, byte[] data)
     {
-        await Db.OpenAsync();
+        await EnsureConnectionOpenAsync();
         InsertNameParameter.Value = name;
         InsertDataParameter.Value = data;
         await InsertDiagramCommand.ExecuteNonQueryAsync();
@@ -65,7 +65,7 @@ internal class SqlServerManager : ISqlServerManager, IDisposable
 
     public async IAsyncEnumerable<DbDiagram> GetDiagramsAsync(string? diagramName)
     {
-        await Db.OpenAsync();
+        await EnsureConnectionOpenAsync();
         bool allDiagrams = string.IsNullOrEmpty(diagramName);
 
         string stmt = "select name, definition from dbo.sysdiagrams";
@@ -91,7 +91,7 @@ internal class SqlServerManager : ISqlServerManager, IDisposable
 
     public async Task InstallArtefactAsync(string stmt)
     {
-        await Db.OpenAsync();
+        await EnsureConnectionOpenAsync();
         SqlCommand cmd = new(stmt, Db);
         await cmd.ExecuteNonQueryAsync();
     }
@@ -99,5 +99,13 @@ internal class SqlServerManager : ISqlServerManager, IDisposable
     public void Dispose()
     {
         Db?.Dispose();
+    }
+
+    private async Task EnsureConnectionOpenAsync()
+    {
+        if (Db.State != System.Data.ConnectionState.Open)
+        {
+            await Db.OpenAsync();
+        }
     }
 }

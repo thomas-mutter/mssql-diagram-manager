@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace Mutter.Tools.SqlServer.DiagramManager;
 
+/// <summary>
+/// Interface to database operations.
+/// </summary>
 internal interface ISqlServerManager
 {
     Task<DbObjectState> GetDbObjectExistanceAsync(DbArtefact artefact);

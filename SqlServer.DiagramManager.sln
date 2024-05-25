@@ -5,7 +5,13 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiagramManager", "projects\DiagramManager\DiagramManager.csproj", "{0C556B6C-7605-44FA-BDF8-C977058342F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagramManager.Tests", "projects\DiagramManager.Tests\DiagramManager.Tests.csproj", "{60C517A8-8607-49EF-9CCA-F020E499ABF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiagramManager.Tests", "projects\DiagramManager.Tests\DiagramManager.Tests.csproj", "{60C517A8-8607-49EF-9CCA-F020E499ABF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF10DA00-A9B0-44C7-9750-9C5D60DDD78D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,8 +20,27 @@ public static class Program
         ["-n"] = "DiagramName"
     };
 
+    public static string Usage = """
+
+        manage-sql-diagrams -m export|import -f <directory> -db <connectionString> [-n <DiagramName>]
+        
+        Parameters:
+        -m,  --Mode             (required): Mode of the operation (export or import)
+        -f,  --Folder           (required): Folder where the diagram will be exported or imported
+        -n,  --DiagramName      (optional): Name of the diagram to export or import
+        -db, --ConnectionString (required): Connection string to the database
+
+        """;
+
     public static async Task Main(string[] args)
     {
+        if (args.Length > 0 && args[0].Equals("-h", StringComparison.InvariantCultureIgnoreCase))
+        {
+            Console.Out.WriteLine(Usage);
+            Environment.ExitCode = 0;
+            return;
+        }
+
         IHost host;
         try
         {
@@ -31,10 +50,13 @@ public static class Program
         catch (InvalidOperationException ex)
         {
             Console.Error.WriteLine(ex.Message);
+
+            Console.Out.WriteLine();
+            Console.Out.WriteLine(Usage);
+
             Environment.ExitCode = 1;
             return;
         }
-
         
         Settings settings = host.Services.GetRequiredService<Settings>();
         Manager manager = host.Services.GetRequiredService<Manager>();
@@ -108,12 +130,11 @@ public static class Program
                 await manager.ExportAsync(settings.Folder, settings.DiagramName);
             }
 
-            log.LogInformation("Diagram maintenance done");
             return 0;
         }
         catch (Exception ex)
         {
-            log.LogError(ex, "Error in database digram maintenance");
+            log.LogError(ex, "Error importing or exporting diagrams");
             return 1;
         }
     }

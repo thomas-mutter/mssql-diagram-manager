@@ -74,10 +74,25 @@ internal class Manager(IDiagramFileManager diagramFileManager, ISqlServerManager
             log.LogInformation("Exporting {DiagramName}.diagram to folder {Folder}", diagramName, folder);
         }
 
+        int count = 0;
         await foreach (DbDiagram diagram in dbManager.GetDiagramsAsync(diagramName))
         {
             await diagramFileManager.SaveDiagramAsync(folder, diagram);
             log.LogInformation("Exported {Name} to {Folder}", diagram.Name, folder);
+            count++;
+        }
+
+        if (!string.IsNullOrEmpty(diagramName) && count == 0)
+        {
+            log.LogError("Diagram {DiagramName} not found in database", diagramName);
+        }
+        else if (count < 1)
+        {
+            log.LogWarning("No diagrams found in database");
+        }
+        else
+        {
+            log.LogInformation("Exported {Count} diagrams", count);
         }
     }
 }
