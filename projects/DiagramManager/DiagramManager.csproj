@@ -16,11 +16,17 @@
     <Authors>Thomas Mutter</Authors>
     <Product>SqlServer Diagram Manager</Product>
     <Description>Exports and imports diagrams from SqlServer databases</Description>
-    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageOutputPath>../../nugets</PackageOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <AssemblyVersion>0.0.1.0</AssemblyVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />

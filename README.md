@@ -6,7 +6,7 @@ This tool exports and imports diagrams from SqlServer databases.
 cd projects/DiagramManager
 dotnet pack
 
-nuget push nugets/Mutter.Tools.SqlServer.DiagramManager.<version>.nupkg --source https://dev.azure.com/swisslife/U_ITWorkbench/_artifacts/feed/SwissLife-U
+nuget push nugets/Mutter.Tools.SqlServer.DiagramManager.<version>.nupkg
 ```
 
 This command builds a Nuget package `nugets/DiagramManager.nupkg`
