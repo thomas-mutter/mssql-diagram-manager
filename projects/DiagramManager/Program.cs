@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 
@@ -34,7 +35,11 @@ public static class Program
             return;
         }
 
-        await host.RunAsync();
+        
+        Settings settings = host.Services.GetRequiredService<Settings>();
+        Manager manager = host.Services.GetRequiredService<Manager>();
+        ILogger<Manager> log = host.Services.GetRequiredService<ILogger<Manager>>();
+        await DoJobAsync(settings, manager, log);
     }
 
     public static IHost BuildHost(string[] args) => Host.CreateDefaultBuilder(args)
@@ -43,8 +48,9 @@ public static class Program
         {
             Settings settings = context.Configuration.GetValidatedSettings();
             services.AddSingleton(settings);
-            services.AddTransient<DiagramManager>();
-            services.AddSingleton<IHostedService, TaskWorker>();
+            services.AddTransient<IDiagramFileManager, DiagramFileManager>();
+            services.AddTransient<ISqlServerManager, SqlServerManager>();
+            services.AddTransient<Manager>();
         })
         .UseSerilog()
         .Build();
@@ -80,5 +86,35 @@ public static class Program
             .Enrich.FromLogContext()
             .WriteTo.Console(outputTemplate: "{Timestamp:HH:mm:ss} {Message:lj}{NewLine}{Exception}")
             .CreateLogger();
+    }
+
+    private static async Task<int> DoJobAsync(Settings settings, Manager manager, ILogger<Manager> log)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        ArgumentNullException.ThrowIfNull(manager);
+        ArgumentNullException.ThrowIfNull(log);
+
+        try
+        {
+            if (settings.Import)
+            {
+                log.LogInformation("Importing diagrams");
+                await manager.ImportAsync(settings.Folder, settings.DiagramName);
+            }
+
+            if (settings.Export)
+            {
+                log.LogInformation("Exporting diagrams");
+                await manager.ExportAsync(settings.Folder, settings.DiagramName);
+            }
+
+            log.LogInformation("Diagram maintenance done");
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            log.LogError(ex, "Error in database digram maintenance");
+            return 1;
+        }
     }
 }
